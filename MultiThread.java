@@ -11,12 +11,12 @@ package multithread;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import static multithread.TicTacToe.punteggio;
 /**
  *
  * @author Matteo Palitto
  */
 public class MultiThread {
-
     /**
      * @param args the command line arguments
      */
@@ -51,8 +51,8 @@ public class MultiThread {
             TimeUnit.MILLISECONDS.sleep(1111);
         } catch (InterruptedException e) {}
 
-        
         long end = System.currentTimeMillis();
+        System.out.println("Il punteggio e: " +punteggio);
         System.out.println("Main Thread completata! tempo di esecuzione: " + (end - start) + "ms");
     }
     
@@ -63,7 +63,8 @@ public class MultiThread {
 // +1 si possono passare parametri (usando il Costruttore)
 // +1 si puo' controllare quando un THREAD inizia indipendentemente da quando e' stato creato
 class TicTacToe implements Runnable {
-    
+    public static int punteggio = 0;
+    public static boolean trovato = false;
     // non essesndo "static" c'e' una copia delle seguenti variabili per ogni THREAD 
     private String t;
     private String msg;
@@ -82,14 +83,25 @@ class TicTacToe implements Runnable {
         int n = 300-j;
         int k = random.nextInt(n)+j;//Valori compresi tra 100 e 300
         for (int i = 10; i > 0; i--) {
+            if (t.equals("TAC"))
+            {
+                trovato = true;
+            }
             msg = "<" + t + "> ";
             //System.out.print(msg);
-            
             try {
                 TimeUnit.MILLISECONDS.sleep(k);
             } catch (InterruptedException e) {
                 System.out.println("THREAD " + t + " e' stata interrotta! bye bye...");
                 return; //me ne vado = termino il THREAD
+            }
+            if ("TOE".equals(t) && trovato == true)
+            {
+                punteggio++;
+            }
+            else
+            {
+                trovato = false;
             }
             msg += t + ": " + i;
             System.out.println(msg);
