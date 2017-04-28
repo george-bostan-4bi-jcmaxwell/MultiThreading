@@ -9,6 +9,7 @@
  */
 package multithread;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 /**
  *
@@ -25,22 +26,30 @@ public class MultiThread {
         System.out.println("Main Thread iniziata...");
         long start = System.currentTimeMillis();
         
-        // Posso creare un THREAD e avviarlo immediatamente
-        Thread tic = new Thread (new TicTac("TIC"));
-        tic.start();
+        Thread tic = new Thread (new TicTacToe("TIC"));
         
-        // Posso creare un 2ndo THREAD e farlo iniziare qualche tempo dopo...
-        Thread tac = new Thread(new TicTac("TAC"));
+        Thread tac = new Thread(new TicTacToe("TAC"));
+        
+        Thread toe = new Thread(new TicTacToe("TOE"));
+        
+        tic.start();    // avvio del primo THREAD
+        tac.start();    // avvio del secondo THREAD
+        toe.start();    // avvio del terzo THREAD
         
         try {
+            tic.join();
             TimeUnit.MILLISECONDS.sleep(1111);
-            tac.start();  // avvio del secondo THREAD
         } catch (InterruptedException e) {}
         
         try {
-            TimeUnit.MILLISECONDS.sleep(1234);
+            tac.join();
+            TimeUnit.MILLISECONDS.sleep(1111);
         } catch (InterruptedException e) {}
-        tac.interrupt(); // stop 2nd THREAD
+        
+        try {
+            toe.join();
+            TimeUnit.MILLISECONDS.sleep(1111);
+        } catch (InterruptedException e) {}
 
         
         long end = System.currentTimeMillis();
@@ -53,14 +62,14 @@ public class MultiThread {
 // +1 si puo estendere da un altra classe
 // +1 si possono passare parametri (usando il Costruttore)
 // +1 si puo' controllare quando un THREAD inizia indipendentemente da quando e' stato creato
-class TicTac implements Runnable {
+class TicTacToe implements Runnable {
     
     // non essesndo "static" c'e' una copia delle seguenti variabili per ogni THREAD 
     private String t;
     private String msg;
 
     // Costruttore, possiamo usare il costruttore per passare dei parametri al THREAD
-    public TicTac (String s) {
+    public TicTacToe (String s) {
         this.t = s;
     }
     
@@ -68,12 +77,16 @@ class TicTac implements Runnable {
     // se facessimo un overloading invece di un override il copilatore ci segnalerebbe l'errore
     // per approfondimenti http://lancill.blogspot.it/2012/11/annotations-override.html
     public void run() {
+        Random random = new Random();
+        int j = 100;
+        int n = 300-j;
+        int k = random.nextInt(n)+j;//Valori compresi tra 100 e 300
         for (int i = 10; i > 0; i--) {
             msg = "<" + t + "> ";
             //System.out.print(msg);
             
             try {
-                TimeUnit.MILLISECONDS.sleep(400);
+                TimeUnit.MILLISECONDS.sleep(k);
             } catch (InterruptedException e) {
                 System.out.println("THREAD " + t + " e' stata interrotta! bye bye...");
                 return; //me ne vado = termino il THREAD
