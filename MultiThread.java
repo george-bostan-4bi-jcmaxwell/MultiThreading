@@ -14,6 +14,7 @@
 package multithread;
 
 import java.util.concurrent.TimeUnit;
+import java.until.logging.Level;
 /**
  *
  * @author George Bostan
@@ -44,19 +45,10 @@ public class MultiThread {
         toe.start();    // avvia il THREAD Toe
         //tutti i THREADS partono contemporaneamente
         try {
-            tic.join(); //mette in attesa il programma principale finche il THREAD TIC non finisce l'esecuzione
-            TimeUnit.MILLISECONDS.sleep(1111);  //tempo di attesa
-        } catch (InterruptedException e) {}
-        
-        try {
-            tac.join(); //mette in attesa il programma principale finche il THREAD TAC non finisce l'esecuzione
-            TimeUnit.MILLISECONDS.sleep(1111);  //tempo di attesa
-        } catch (InterruptedException e) {}
-        
-        try {
             toe.join(); //mette in attesa il programma principale finche il THREAD TOE non finisce l'esecuzione
-            TimeUnit.MILLISECONDS.sleep(1111);  //tempo di attesa
-        } catch (InterruptedException e) {}
+        } 
+        catch (InterruptedException e) {
+        }
 
         System.out.println("Il punteggio e: " +x.punteggio());  //mostra su schermo il punteggio finale calcolato nel run()
         System.out.println("Main Thread completata! tempo di esecuzione: " + (end - start) + "ms"); //indica il tempo impiegato dal programma
