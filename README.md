@@ -11,3 +11,4 @@ Si può dunque notare che il risultato finale sono la stampa di 3 sequenze di nu
 Infine ogni volta che il THREAD Toe capita dopo quello Tac, un contatore si incrementa e, alla fine delle 3 sequenze di numeri, mostra quante volte questa condizione è avvenuta (punteggio). 
 
 ## Esercizio 2
+Il secondo esercizio è una variante del primo al quale abbiamo sostituito le variabili static e implementato al loro posto i monitor per evitare i conflitti.
