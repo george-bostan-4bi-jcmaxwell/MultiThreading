@@ -14,7 +14,6 @@
 package multithread;
 
 import java.util.concurrent.TimeUnit;
-import java.until.logging.Level;
 /**
  *
  * @author George Bostan
@@ -33,7 +32,7 @@ public class MultiThread {
     public static void main(String[] args) {
         System.out.println("Main Thread iniziata...");
         Schermi x = new Schermi();
-        
+        long start = System.currentTimeMillis();
         Thread tic = new Thread (new TicTacToe("TIC", x)); //permette la creazione primo THREAD TIC
         
         Thread tac = new Thread(new TicTacToe("TAC", x));  //permette la creazione secondo THREAD TAC
@@ -49,7 +48,7 @@ public class MultiThread {
         } 
         catch (InterruptedException e) {
         }
-
+        long end = System.currentTimeMillis();
         System.out.println("Il punteggio e: " +x.punteggio());  //mostra su schermo il punteggio finale calcolato nel run()
         System.out.println("Main Thread completata! tempo di esecuzione: " + (end - start) + "ms"); //indica il tempo impiegato dal programma
     }
@@ -66,7 +65,21 @@ class TicTacToe implements Runnable {
         this.t = s;
         this.x = x;
     }
-    class Schermi {
+    
+    @Override // Annotazione per il compilatore
+    // se facessimo un overloading invece di un override il copilatore ci segnalerebbe l'errore
+    // per approfondimenti http://lancill.blogspot.it/2012/11/annotations-override.html
+    // questa è la parte del codice che permette di calcolare sia il tempo random, sia il punteggio finale
+    // esso utilizza poi il tempo creato per avviare i THREADS in modo casuale
+    public void run() {
+        for (int i = 10; i > 0; i--) {
+            msg = "<" + t + "> " + t + ": " + i;
+            x.scrivi(t, msg);
+        }
+    }
+    
+}
+class Schermi {
 
   String ultimoTHREAD = ""; // ultimo thread che ha scritto sullo schermo
   int punteggio = 0;
@@ -88,17 +101,4 @@ class TicTacToe implements Runnable {
     System.out.println(msg);
     ultimoTHREAD = thread;
   }
-}
-    @Override // Annotazione per il compilatore
-    // se facessimo un overloading invece di un override il copilatore ci segnalerebbe l'errore
-    // per approfondimenti http://lancill.blogspot.it/2012/11/annotations-override.html
-    // questa è la parte del codice che permette di calcolare sia il tempo random, sia il punteggio finale
-    // esso utilizza poi il tempo creato per avviare i THREADS in modo casuale
-    public void run() {
-        for (int i = 10; i > 0; i--) {
-            msg = "<" + t + "> " + t + ": " + i;
-            x.scrivi(t, msg);
-        }
-    }
-    
 }
