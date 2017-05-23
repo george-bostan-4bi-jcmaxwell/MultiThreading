@@ -1,5 +1,5 @@
 # Funzionamento Programma
-# Esercizio 1
+## Esercizio 1
 Il programma TicTacToe utilizza tre THREADs diversi:
 - Tic
 - Tac
