@@ -1,5 +1,5 @@
-## Funzionamento Programma
-# Esercizio 1
+# Funzionamento Programma
+## Esercizio 1
 Il programma TicTacToe utilizza tre THREADs diversi:
 - Tic
 - Tac
@@ -10,4 +10,4 @@ Tutti i THREADs partono contemporaneamente ma poi, grazie ad un tempo generato c
 Si può dunque notare che il risultato finale sono la stampa di 3 sequenze di numeri sempre diverse dovute al tempo che essendo casuale cambia ogni volta.
 Infine ogni volta che il THREAD Toe capita dopo quello Tac, un contatore si incrementa e, alla fine delle 3 sequenze di numeri, mostra quante volte questa condizione è avvenuta (punteggio). 
 <br>
-# Esercizio 2
+## Esercizio 2
