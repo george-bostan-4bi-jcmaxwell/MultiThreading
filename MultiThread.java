@@ -8,9 +8,7 @@
  * 6. posso passare parametri al THREADs tramite il costruttore della classe Runnable
  */
 
-//il codice è stato fatto completamente da me, ad eccezione dell'ultima parte, infatti ho chiesto aiuto a gerardo per le condizioni da mettere negli if
-//se il codice è simile a qualcuno è perchè su github chiunque può vedere il codice degli altri pertanto può essere stato copiato.
-//ripeto quindi che il codice è stato fatto da me tranne per i due if finali che ho fatto con l'aiuto di gerardo.
+//questa variante del primo esercizio sostituisce le variabili static con i monitor che permettono di evitare i conflitti
 package multithread;
 
 import java.util.concurrent.TimeUnit;
@@ -25,13 +23,13 @@ public class MultiThread {
     // "main" e' il THREAD principale da cui vengono creati e avviati tutti gli altri THREADs
     // i vari THREADs poi evolvono indipendentemente dal "main" che puo' eventualmente terminare prima degli altri
     // nel main vengono creati e utilizzati 3 threads
-    // essi partono contemporaneamente e dopo un tempo random stabilito nel run() essi scrivono su dusplai il conto alla rovescia che parte da 10
+    // essi partono contemporaneamente e dopo un tempo random stabilito nel run() essi scrivono su display il conto alla rovescia che parte da 10
     // essendo random i threads scrivono i numeri su schermo in ordine casuale 
     //(nel senso che qualunque dei 3 threads potrebbe scrivere prima dell'altro e subito dopo potrebbe accadere il contrario)
     // viene infine mostrato il punteggio che rappresenta le volte dove il thread TOE capita prima di TAC
     public static void main(String[] args) {
         System.out.println("Main Thread iniziata...");
-        Schermi x = new Schermi();
+        Schermi x = new Schermi();  //creazione del monitor
         long start = System.currentTimeMillis();
         Thread tic = new Thread (new TicTacToe("TIC", x)); //permette la creazione primo THREAD TIC
         
@@ -49,7 +47,7 @@ public class MultiThread {
         catch (InterruptedException e) {
         }
         long end = System.currentTimeMillis();
-        System.out.println("Il punteggio e: " +x.punteggio());  //mostra su schermo il punteggio finale calcolato nel run()
+        System.out.println("Il punteggio e: " +x.punteggio());  //mostra su schermo il punteggio finale calcolato nel monitor
         System.out.println("Main Thread completata! tempo di esecuzione: " + (end - start) + "ms"); //indica il tempo impiegato dal programma
     }
     
@@ -79,17 +77,17 @@ class TicTacToe implements Runnable {
     }
     
 }
-class Schermi {
+class Schermi {     //monitor
 
   String ultimoTHREAD = ""; // ultimo thread che ha scritto sullo schermo
-  int punteggio = 0;
+  int punteggio = 0;    //variabile che permette di calcolare il punteggio finale
 
   public int punteggio() {  // fornisce il punteggio
     return this.punteggio;
   }
 
-  public synchronized void scrivi(String thread, String msg) {
-    int casuale=100+(int)(Math.random()*300); //numero casuale tra 100 e 400
+  public synchronized void scrivi(String thread, String msg) {      //implementando syncrhonized il programma evita di avere dei conflitti
+    int casuale=100+(int)(Math.random()*300); //numero casuale tra 100 e 300
     msg += ": " + casuale + " :";
     if( thread.equals("TOE") && ultimoTHREAD.equals("TAC")) {
         punteggio++;
