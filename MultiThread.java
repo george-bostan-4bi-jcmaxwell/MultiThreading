@@ -20,6 +20,7 @@ public class MultiThread {
     /**
      * @param args the command line arguments
      */
+    //ESERCIZIO 1
     // "main" e' il THREAD principale da cui vengono creati e avviati tutti gli altri THREADs
     // i vari THREADs poi evolvono indipendentemente dal "main" che puo' eventualmente terminare prima degli altri
     // nel main vengono creati e utilizzati 3 threads
@@ -27,10 +28,14 @@ public class MultiThread {
     // essendo random i threads scrivono i numeri su schermo in ordine casuale 
     //(nel senso che qualunque dei 3 threads potrebbe scrivere prima dell'altro e subito dopo potrebbe accadere il contrario)
     // viene infine mostrato il punteggio che rappresenta le volte dove il thread TOE capita prima di TAC
+    //ESERCIZIO 2
+    //questa volta viene implementato il monitor che permette di evitare i conflitti
+    //il monitor è come un semaforo che attraverso la parola syncronized permette la gestione di una sola risorsa condivisa tra diversi THREADs
+    //la risorsa viene bloccata evitando di far accedere altri THREADs
     public static void main(String[] args) {
-        System.out.println("Main Thread iniziata...");
-        Schermi x = new Schermi();  //creazione del monitor
-        long start = System.currentTimeMillis();
+        System.out.println("Main Thread iniziata...");  //output su video che indica l'avvio del programma
+        Schermi x = new Schermi();  //creazione del monitor che controlla l'accesso alla risorsa condivisa
+        long start = System.currentTimeMillis();    //indica il tempo di inizio del programma
         Thread tic = new Thread (new TicTacToe("TIC", x)); //permette la creazione primo THREAD TIC
         
         Thread tac = new Thread(new TicTacToe("TAC", x));  //permette la creazione secondo THREAD TAC
@@ -46,9 +51,10 @@ public class MultiThread {
         } 
         catch (InterruptedException e) {
         }
-        long end = System.currentTimeMillis();
+        long end = System.currentTimeMillis();  //indica il tempo alla conclusione del programma
         System.out.println("Il punteggio e: " +x.punteggio());  //mostra su schermo il punteggio finale calcolato nel monitor
-        System.out.println("Main Thread completata! tempo di esecuzione: " + (end - start) + "ms"); //indica il tempo impiegato dal programma
+        System.out.println("Main Thread completata! tempo di esecuzione: " + (end - start) + "ms");
+        //calcola il tempo impiegato dal programma per eseguire tutto il codice e lo stampa su schermo
     }
     
 }
@@ -58,7 +64,7 @@ class TicTacToe implements Runnable {
     private String msg;
     Schermi x;
 
-    // Costruttore
+    // Costruttore, possiamo usarlo per passare dei parametri al THREAD
     public TicTacToe (String s, Schermi x) {
         this.t = s;
         this.x = x;
@@ -67,8 +73,6 @@ class TicTacToe implements Runnable {
     @Override // Annotazione per il compilatore
     // se facessimo un overloading invece di un override il copilatore ci segnalerebbe l'errore
     // per approfondimenti http://lancill.blogspot.it/2012/11/annotations-override.html
-    // questa è la parte del codice che permette di calcolare sia il tempo random, sia il punteggio finale
-    // esso utilizza poi il tempo creato per avviare i THREADS in modo casuale
     public void run() {
         for (int i = 10; i > 0; i--) {
             msg = "<" + t + "> " + t + ": " + i;
@@ -77,9 +81,9 @@ class TicTacToe implements Runnable {
     }
     
 }
-class Schermi {     //monitor
+class Schermi {     //questo è il monitor che permette di gestire le risorse condivise
 
-  String ultimoTHREAD = ""; // ultimo thread che ha scritto sullo schermo
+  String ultimoTHREAD = ""; //contiene l'ultimo thread che ha scritto sullo schermo
   int punteggio = 0;    //variabile che permette di calcolare il punteggio finale
 
   public int punteggio() {  // fornisce il punteggio
@@ -87,10 +91,12 @@ class Schermi {     //monitor
   }
 
   public synchronized void scrivi(String thread, String msg) {      //implementando syncrhonized il programma evita di avere dei conflitti
-    int casuale=100+(int)(Math.random()*300); //numero casuale tra 100 e 300
+      //creazione di numeri casuali tra 100 e 300
+    int casuale=100+(int)(Math.random()*300); 
     msg += ": " + casuale + " :";
-    if( thread.equals("TOE") && ultimoTHREAD.equals("TAC")) {
-        punteggio++;
+    if( thread.equals("TOE") && ultimoTHREAD.equals("TAC")) {   
+        //condizione che controlla se il THREAD attualmente in uso è uguale a TOE e se l'ultimo THREAD salvato nella variabile è uguale a TAC
+        punteggio++;    //se la condizione si avvera il punteggio viene incrementato
         msg += "  <----------------";
     }
     try {
