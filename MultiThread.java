@@ -31,7 +31,7 @@ public class MultiThread {
     //ESERCIZIO 2
     //questa volta viene implementato il monitor che permette di evitare i conflitti
     //il monitor è come un semaforo che attraverso la parola syncronized permette la gestione di una sola risorsa condivisa tra diversi THREADs
-    //la risorsa quando viene bloccata evitando di far accedere altri THREADs
+    //la risorsa viene bloccata evitando di far accedere altri THREADs
     public static void main(String[] args) {
         System.out.println("Main Thread iniziata...");  //output su video che indica l'avvio del programma
         Schermi x = new Schermi();  //creazione del monitor che controlla l'accesso alla risorsa condivisa
